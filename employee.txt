@@ -1,0 +1,118 @@
+<?php
+$host="localhost";
+$uname="root";
+$upass="";
+$dbname="alldata";
+$link= mysqli_connect($host,$uname,$upass,$dbname);
+        
+if(isset($_POST["btnsave"]))
+        {
+            $empid=$_POST["empid"];
+            $empname=$_POST["empname"];
+            $address=$_POST["empadd"];
+            $salary=$_POST["empsalary"];
+            $qry="insert emp_detail values($empid, '$empname', '$address', $salary)";
+            $res= mysqli_query($link, $qry);
+            if(mysqli_affected_rows($link)>0)
+            {
+                echo 'Data save';
+            }
+ else {
+                echo 'Data not save';
+ }
+        }
+        
+        if (isset($_REQUEST["empid"]))
+        {
+            $empid=$_REQUEST["empid"];
+            $qry="select * from emp_detail where empid=$empid";
+            $res= mysqli_query($link, $qry);
+            if ($r= mysqli_fetch_row($res))
+            {
+                $empname=$r[1];
+                $address=$r[2];
+                $salary=$r[3];
+            }
+        }
+        if(isset($_POST["btnupdate"]))
+        {
+            $empid=$_POST["empid"];
+            $empname=$_POST["empname"];
+            $address=$_POST["empadd"];
+            $salary=$_POST["empsalary"];
+            $qry="update emp_detail set empname='$empname', address='$address', salary=$salary where empid=$empid";
+            $res= mysqli_query($link, $qry);
+            if(mysqli_affected_rows($link)>0)
+            {
+                echo 'Data Updated';
+            }
+ else {
+                echo 'Data Not Updated';
+ }
+        }
+        if(isset($_post[""]))
+        {
+            
+        }
+        
+?>
+
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title></title>
+    </head>
+    <body>
+        <form name="az" action="newemployee.php" method="POST">
+            <table border="8">
+                <tr>
+                    <td colspan="2" style="text-align: Center">Employees Detail
+                    </td>
+                </tr>
+                <tr>
+                    <td> Employee's Id : </td>
+                    <td>
+                        <input type="text" name="empid" value="<?php if(isset($empid)) echo $empid; ?>">
+                    </td>
+                </tr>
+                <tr>
+                    <td> Employee Name : </td>
+                    <td>
+                        <input type="text" Name="empname" value="<?php if(isset($empname)) echo $empname; ?>">
+                    </td>
+                </tr>
+                <tr>
+                    <td> Address : </td>
+                    <td>
+                        <input type="text" name="empadd" value="<?php if(isset($address)) echo $address; ?>">
+                    </td>
+                </tr>
+                <tr>
+                    <td> Salary : </td>
+                    <td>
+                        <input type="text" name="empsalary" value="<?php if(isset($salary)) echo $salary ?>">
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <input type="submit" value="Save" name="btnsave">
+                        <input type="submit" value="Update" name="btnupdate">
+                        <input type="submit" value="Delete" name="btndelete">
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+<?php
+$qry="select * from emp_detail";
+$res= mysqli_query($link,$qry);
+while ($r= mysqli_fetch_row($res))
+{
+    echo"<a href=newemployee.php?empid=$r[0]>$r[1]</a><br>";
+}
+?>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </body>
+</html>
